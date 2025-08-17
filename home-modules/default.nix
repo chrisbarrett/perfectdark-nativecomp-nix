@@ -3,7 +3,6 @@
 let
   cfg = config.programs.perfectdark;
 
-  # Create a wrapper that sets PERFECTDARK_DATA_DIR and launches the game
   wrappedPerfectDark = pkgs.symlinkJoin {
     name = "perfectdark-wrapped";
     paths = [ cfg.package ];
@@ -11,10 +10,10 @@ let
     postBuild =
       if pkgs.stdenv.isDarwin then ''
         wrapProgram $out/Applications/PerfectDark.app/Contents/MacOS/pd \
-          --set PERFECTDARK_DATA_DIR "${cfg.dataDirectory}"
+          --add-flags --basedir='${cfg.baseDirectory}'
       '' else ''
         wrapProgram $out/bin/pd \
-          --set PERFECTDARK_DATA_DIR "${cfg.dataDirectory}"
+          --add-flags --basedir='${cfg.baseDirectory}'
       '';
   };
 in
@@ -29,13 +28,13 @@ in
       description = "Perfect Dark package to use";
     };
 
-    dataDirectory = lib.mkOption {
+    baseDirectory = lib.mkOption {
       type = lib.types.str;
       default =
         if pkgs.stdenv.isDarwin
-        then "${config.home.homeDirectory}/Library/Application Support/perfectdark/data"
-        else "${config.home.homeDirectory}/.local/share/perfectdark/data";
-      description = "Directory where Perfect Dark will look for ROM files and save data";
+        then "${config.home.homeDirectory}/Library/Application Support/perfectdark"
+        else "${config.home.homeDirectory}/.local/share/perfectdark";
+      description = "Directory for Perfect Dark's runtime configuration and data dirs";
     };
   };
 
@@ -43,7 +42,7 @@ in
     home.packages = [ wrappedPerfectDark ];
 
     home.activation.perfectdarkDataDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      mkdir -p "${cfg.dataDirectory}"
+      mkdir -p "${cfg.baseDirectory}/data"
     '';
   };
 }
