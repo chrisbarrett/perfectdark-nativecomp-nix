@@ -2,6 +2,21 @@
 
 let
   cfg = config.programs.perfectdark;
+
+  # Create a wrapper that sets PERFECTDARK_DATA_DIR and launches the game
+  wrappedPerfectDark = pkgs.symlinkJoin {
+    name = "perfectdark-wrapped";
+    paths = [ cfg.package ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild =
+      if pkgs.stdenv.isDarwin then ''
+        wrapProgram $out/Applications/PerfectDark.app/Contents/MacOS/pd \
+          --set PERFECTDARK_DATA_DIR "${cfg.dataDirectory}"
+      '' else ''
+        wrapProgram $out/bin/pd \
+          --set PERFECTDARK_DATA_DIR "${cfg.dataDirectory}"
+      '';
+  };
 in
 {
   options.programs.perfectdark = {
@@ -25,14 +40,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [ cfg.package ];
+    home.packages = [ wrappedPerfectDark ];
 
     home.activation.perfectdarkDataDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       mkdir -p "${cfg.dataDirectory}"
     '';
-
-    home.sessionVariables = {
-      PERFECTDARK_DATA_DIR = cfg.dataDirectory;
-    };
   };
 }

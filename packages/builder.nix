@@ -31,5 +31,9 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
   };
 
+  patches = [
+    ../patches/0001-add-perfectdark-data-dir-env-support.patch
+  ];
+
   inherit installPhase cmakeFlags;
 }
