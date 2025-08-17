@@ -22,7 +22,7 @@
       overlays.perfectdark = import ./overlay.nix;
       overlays.default = import ./overlay.nix;
 
-      homeManagerModules.perfectdark = import ./home-modules;
-      homeManagerModules.default = import ./home-modules;
+      homeModules.perfectdark = import ./home-modules;
+      homeModules.default = import ./home-modules;
     };
 }
