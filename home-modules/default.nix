@@ -71,7 +71,7 @@ in
           let
             programPath = if pkgs.stdenv.isDarwin then "$out/Applications/PerfectDark.app/Contents/MacOS/pd" else "$out/bin/pd";
 
-            args = lib.cli.toGNUCommandLineShell { optionValueSeparator = "="; } {
+            args = lib.cli.toGNUCommandLineShell { } {
               basedir = cfg.baseDirectory;
               savedir = cfg.saveDirectory;
               moddir = cfg.modDirectory;
@@ -82,7 +82,7 @@ in
             };
           in
           ''
-            wrapProgram ${programPath} --add-flags ${args}
+            wrapProgram ${programPath} --add-flags "${args}"
           '';
       })
     ];
