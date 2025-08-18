@@ -21,7 +21,7 @@ in
       baseDirectory = lib.mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Directory for Perfect Dark's runtime configuration and data dirs";
+        description = "Override path to the base data directory, i.e. the one where your ROM file is.";
       };
 
       saveDirectory = lib.mkOption {
@@ -69,13 +69,9 @@ in
         nativeBuildInputs = [ pkgs.makeWrapper ];
         postBuild =
           let
-            programPath =
-              if pkgs.stdenv.isDarwin then
-                "/Applications/PerfectDark.app/Contents/MacOS/pd"
-              else
-                "/bin/pd";
+            programPath = if pkgs.stdenv.isDarwin then "$out/Applications/PerfectDark.app/Contents/MacOS/pd" else "$out/bin/pd";
 
-            args = lib.cli.toGNUCommandLineShell { } {
+            args = lib.cli.toGNUCommandLineShell { optionValueSeparator = "="; } {
               basedir = cfg.baseDirectory;
               savedir = cfg.saveDirectory;
               moddir = cfg.modDirectory;
@@ -86,7 +82,7 @@ in
             };
           in
           ''
-            wrapProgram $out/${programPath} --add-flags ${args}
+            wrapProgram ${programPath} --add-flags ${args}
           '';
       })
     ];
