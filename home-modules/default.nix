@@ -18,6 +18,8 @@ in
         description = "Perfect Dark package to use";
       };
 
+      # See: https://github.com/fgsfdsfgs/perfect_dark/wiki/Command-line-parameters
+
       baseDirectory = lib.mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -54,6 +56,22 @@ in
         description = "Automatically select player file";
       };
 
+      portable = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Use only executable directory, ignoring OS defaults.
+
+          Setting this will prevent SDL from creating the root perfectdark
+          configuration directory. You'll need to set `baseDirectory` and
+          `saveDirectory` if you set this, since the Nix Store is a read-only
+          filesystem.
+
+          This is useful on macOS for keeping "~/Library/Application Support"
+          nice and clean.
+        '';
+      };
+
       skipIntro = lib.mkOption {
         type = types.bool;
         default = false;
@@ -77,6 +95,7 @@ in
               moddir = cfg.modDirectory;
               rom-file = cfg.romFile;
               eeprom-file = cfg.eepromFile;
+              portable = cfg.portable;
               profile = cfg.profile;
               skip-intro = cfg.skipIntro;
             };
