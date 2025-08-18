@@ -7,7 +7,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>Perfect Dark</string>
 	<key>CFBundleExecutable</key>
-	<string>pd</string>
+	<string>perfectdark</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.fgsfdsfgs.perfectdark</string>
 	<key>CFBundleInfoDictionaryVersion</key>

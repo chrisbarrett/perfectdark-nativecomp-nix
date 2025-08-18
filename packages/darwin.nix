@@ -7,8 +7,8 @@
     mkdir -p $out/Applications/PerfectDark.app/Contents/{MacOS,Resources,Frameworks}
 
     # Copy the main executable
-    cp pd.* $out/Applications/PerfectDark.app/Contents/MacOS/pd
-    chmod +x $out/Applications/PerfectDark.app/Contents/MacOS/pd
+    cp pd.* $out/Applications/PerfectDark.app/Contents/MacOS/perfectdark
+    chmod +x $out/Applications/PerfectDark.app/Contents/MacOS/perfectdark
 
     # Copy Info.plist and icon
     cp ${./macos/Info.plist} $out/Applications/PerfectDark.app/Contents/Info.plist
@@ -19,7 +19,7 @@
     cp -r ${pkgs.zlib}/lib/libz*.dylib $out/Applications/PerfectDark.app/Contents/Frameworks/ || true
 
     # Fix library paths to use bundled versions
-    install_name_tool -change ${pkgs.sdl2-compat}/lib/libSDL2-2.0.0.dylib @executable_path/../Frameworks/libSDL2-2.0.0.dylib $out/Applications/PerfectDark.app/Contents/MacOS/pd || true
-    install_name_tool -change ${pkgs.zlib}/lib/libz.dylib @executable_path/../Frameworks/libz.dylib $out/Applications/PerfectDark.app/Contents/MacOS/pd || true
+    install_name_tool -change ${pkgs.sdl2-compat}/lib/libSDL2-2.0.0.dylib @executable_path/../Frameworks/libSDL2-2.0.0.dylib $out/Applications/PerfectDark.app/Contents/MacOS/perfectdark || true
+    install_name_tool -change ${pkgs.zlib}/lib/libz.dylib @executable_path/../Frameworks/libz.dylib $out/Applications/PerfectDark.app/Contents/MacOS/perfectdark || true
   '';
 }

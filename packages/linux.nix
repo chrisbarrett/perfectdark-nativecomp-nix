@@ -11,7 +11,7 @@
 
   installPhase = ''
     mkdir -p $out/bin
-    cp pd.* $out/bin/pd
-    chmod +x $out/bin/pd
+    cp pd.* $out/bin/perfectdark
+    chmod +x $out/bin/perfectdark
   '';
 }
