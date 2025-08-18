@@ -18,6 +18,19 @@ in
         description = "Perfect Dark package to use";
       };
 
+      binaryName = lib.mkOption {
+        type = types.str;
+        default = "perfectdark";
+        description = ''
+          The name of the Perfect Dark binary.
+
+          The package provided by the overlay renames it from `pd` to
+          `perfectdark` as a precaution to avoid naming collision with
+          `pkgs.puredata`. If you override the `package` option you will
+          probably need to set this to `pd`.
+        '';
+      };
+
       # See: https://github.com/fgsfdsfgs/perfect_dark/wiki/Command-line-parameters
 
       baseDirectory = lib.mkOption {
@@ -87,7 +100,7 @@ in
         nativeBuildInputs = [ pkgs.makeWrapper ];
         postBuild =
           let
-            programPath = if pkgs.stdenv.isDarwin then "$out/Applications/PerfectDark.app/Contents/MacOS/pd" else "$out/bin/pd";
+            programPath = if pkgs.stdenv.isDarwin then "$out/Applications/PerfectDark.app/Contents/MacOS/${cfg.binaryName}" else "$out/bin/${cfg.binaryName}";
 
             args = lib.cli.toGNUCommandLineShell { } {
               basedir = cfg.baseDirectory;
